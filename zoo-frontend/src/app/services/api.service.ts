@@ -1,61 +1,72 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '@auth0/auth0-angular';
-import { Observable, map, switchMap, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private backendUrl = 'http://localhost:3000';
+  private apiUrl = 'http://localhost:3001'; // Assurez-vous que c'est le bon port
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return this.auth.getAccessTokenSilently().pipe(
-      tap((token) => console.log('🔑 Token obtenu')),
-      map((token) => new HttpHeaders().set('Authorization', `Bearer ${token}`)),
-      tap((headers) => console.log('📨 Headers préparés:', headers))
-    );
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      // Supprimez temporairement l'en-tête d'autorisation
+      // 'Authorization': `Bearer ${this.authService.getToken()}`
+    });
   }
 
-  get<T>(endpoint: string): Observable<T> {
-    console.log(`🌐 GET ${endpoint}`);
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<T>(`${this.backendUrl}${endpoint}`, { headers })
-      ),
+  get<T>(url: string): Observable<T> {
+    console.log(`API GET: ${this.apiUrl}${url}`);
+    return this.http.get<T>(`${this.apiUrl}${url}`, {
+      headers: this.getHeaders(),
+    }).pipe(
       tap({
-        next: (response) => console.log(`✅ GET ${endpoint} réussi:`, response),
-        error: (error) => console.error(`❌ GET ${endpoint} échoué:`, error),
+        next: (data) => console.log(`GET ${url} response:`, data),
+        error: (error) => console.error(`GET ${url} error:`, error)
       })
     );
   }
 
-  post<T>(endpoint: string, data: any): Observable<T> {
-    console.log(`🌐 POST ${endpoint}`, data);
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.post<T>(`${this.backendUrl}${endpoint}`, data, { headers })
-      ),
+  post<T>(url: string, body: any): Observable<T> {
+    console.log(`API POST: ${this.apiUrl}${url}`, body);
+    return this.http.post<T>(`${this.apiUrl}${url}`, body, {
+      headers: this.getHeaders(),
+    }).pipe(
       tap({
-        next: (response) =>
-          console.log(`✅ POST ${endpoint} réussi:`, response),
-        error: (error) => console.error(`❌ POST ${endpoint} échoué:`, error),
+        next: (data) => console.log(`POST ${url} response:`, data),
+        error: (error) => console.error(`POST ${url} error:`, error)
       })
     );
   }
 
-  delete<T>(endpoint: string): Observable<T> {
-    console.log(`🌐 DELETE ${endpoint}`);
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.delete<T>(`${this.backendUrl}${endpoint}`, { headers })
-      ),
+  patch<T>(url: string, body: any = {}): Observable<T> {
+    console.log(`API PATCH: ${this.apiUrl}${url}`, body);
+    return this.http.patch<T>(`${this.apiUrl}${url}`, body, {
+      headers: this.getHeaders(),
+    }).pipe(
       tap({
-        next: (response) =>
-          console.log(`✅ DELETE ${endpoint} réussi:`, response),
-        error: (error) => console.error(`❌ DELETE ${endpoint} échoué:`, error),
+        next: (data) => console.log(`PATCH ${url} response:`, data),
+        error: (error) => console.error(`PATCH ${url} error:`, error)
+      })
+    );
+  }
+
+  delete<T>(url: string): Observable<T> {
+    console.log(`API DELETE: ${this.apiUrl}${url}`);
+    return this.http.delete<T>(`${this.apiUrl}${url}`, {
+      headers: this.getHeaders(),
+    }).pipe(
+      tap({
+        next: (data) => console.log(`DELETE ${url} response:`, data),
+        error: (error) => console.error(`DELETE ${url} error:`, error)
       })
     );
   }

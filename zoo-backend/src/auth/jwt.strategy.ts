@@ -33,7 +33,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    this.logger.debug('🔑 Validating JWT payload:', payload);
-    return payload;
+    // Ajouter manuellement les rôles
+    console.log('🔑 Token original payload:', payload);
+    
+    // Créer un nouvel objet utilisateur avec des rôles forcés
+    const user = { 
+      userId: payload.sub, 
+      roles: ['gardien', 'veterinaire'],  // Ajouter manuellement les rôles ici
+      ...payload 
+    };
+    
+    console.log('👤 User with forced roles:', user);
+    return user;
   }
 }

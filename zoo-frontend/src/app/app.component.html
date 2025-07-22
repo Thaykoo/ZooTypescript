@@ -179,6 +179,10 @@
 
 <mat-toolbar color="primary">
   <span>🐾 Zoo 🐾</span>
+  <div class="nav-links">
+    <a mat-button routerLink="/liste">Animaux</a>
+    <a mat-button routerLink="/enclos">Enclos</a>
+  </div>
   <span class="spacer"></span>
 
   @if (auth.isAuthenticated$ | async) {
@@ -193,6 +197,8 @@
   <button mat-raised-button color="primary" (click)="testCallApi()">
     TEST API
   </button>
+  <a routerLink="/liste" mat-raised-button color="primary" style="margin-left: 10px;">Liste des animaux</a>
+  <a routerLink="/enclos" mat-raised-button color="primary" style="margin-left: 10px;">Gestion des enclos</a>
 </div>
 
 <router-outlet></router-outlet>

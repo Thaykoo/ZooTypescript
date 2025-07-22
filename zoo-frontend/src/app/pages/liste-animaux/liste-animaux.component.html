@@ -1,48 +1,43 @@
-<h1>Liste des animaux</h1>
-
-<button mat-raised-button color="primary" (click)="ajouterAnimal()">
-  Ajouter un animal
-</button>
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <!-- Nom -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Nom</th>
-    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-  </ng-container>
-
-  <!-- Espèce -->
-  <ng-container matColumnDef="species">
-    <th mat-header-cell *matHeaderCellDef>Espèce</th>
-    <td mat-cell *matCellDef="let element">{{ element.species }}</td>
-  </ng-container>
-
-  <!-- Santé -->
-  <ng-container matColumnDef="health">
-    <th mat-header-cell *matHeaderCellDef>Santé</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.health ?? "Inconnu" }}
-    </td>
-  </ng-container>
-
-  <!-- Action -->
-  <ng-container matColumnDef="action">
-    <th mat-header-cell *matHeaderCellDef>Action</th>
-    <td mat-cell *matCellDef="let element">
-      <button
-        mat-button
-        color="primary"
-        [routerLink]="['/details', element.id]"
-      >
-        Détails
-      </button>
-
-      <button mat-button color="warn" (click)="relacherAnimal(element.id)">
-        Relâcher
-      </button>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+<div class="container">
+  <h1>Liste des animaux</h1>
+  
+  <button mat-raised-button color="primary" (click)="ajouterAnimal()">
+    Ajouter un animal
+  </button>
+  
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Nom Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let animal">{{animal.name}}</td>
+    </ng-container>
+    
+    <!-- Espèce Column -->
+    <ng-container matColumnDef="species">
+      <th mat-header-cell *matHeaderCellDef>Espèce</th>
+      <td mat-cell *matCellDef="let animal">{{animal.species}}</td>
+    </ng-container>
+    
+    <!-- Santé Column -->
+    <ng-container matColumnDef="health">
+      <th mat-header-cell *matHeaderCellDef>Santé</th>
+      <td mat-cell *matCellDef="let animal">{{animal.health}}</td>
+    </ng-container>
+    
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let animal">
+        <button mat-button color="accent" (click)="soignerAnimal(animal.id)">
+          Soigner
+        </button>
+        <button mat-button color="warn" (click)="supprimerAnimal(animal.id)">
+          Supprimer
+        </button>
+      </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

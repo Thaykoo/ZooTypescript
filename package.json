@@ -15,12 +15,18 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
+		"@nestjs/common": "^11.1.5",
 		"@nestjs/config": "^4.0.2",
+		"@nestjs/core": "^11.1.5",
 		"@nestjs/passport": "^11.0.5",
+		"@nestjs/platform-express": "^11.1.5",
 		"@types/pg": "^8.15.4",
 		"jwks-rsa": "^3.2.0",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
-		"pg": "^8.16.2"
+		"pg": "^8.16.2",
+		"reflect-metadata": "^0.2.2",
+		"sqlite3": "^5.1.7",
+		"typeorm": "^0.3.25"
 	}
 }
