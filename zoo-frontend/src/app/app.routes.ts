@@ -1,11 +1,37 @@
 import { Routes } from '@angular/router';
-import { ListeAnimauxComponent } from './pages/liste-animaux/liste-animaux.component';
-import { ListeEnclosComponent } from './pages/liste-enclos/liste-enclos.component';
-import { ListeVisitesComponent } from './pages/liste-visites/liste-visites.component';
+import { AuthGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/animaux', pathMatch: 'full' },
-  { path: 'animaux', component: ListeAnimauxComponent },
-  { path: 'enclos', component: ListeEnclosComponent },
-  { path: 'visites', component: ListeVisitesComponent },
+  { 
+    path: '', 
+    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'callback',
+    loadComponent: () => import('./components/callback/callback.component').then(m => m.CallbackComponent)
+  },
+  {
+    path: 'test-auth',
+    loadComponent: () => import('./test-auth.component').then(m => m.TestAuthComponent)
+  },
+  { 
+    path: 'animaux', 
+    loadComponent: () => import('./pages/liste-animaux/liste-animaux.component').then(m => m.ListeAnimauxComponent),
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'enclos', 
+    loadComponent: () => import('./pages/liste-enclos/liste-enclos.component').then(m => m.ListeEnclosComponent),
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'visites', 
+    loadComponent: () => import('./pages/liste-visites/liste-visites.component').then(m => m.ListeVisitesComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'unauthorized',
+    loadComponent: () => import('./components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
+  },
+  { path: '**', redirectTo: '/' }
 ];

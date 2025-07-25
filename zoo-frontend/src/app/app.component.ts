@@ -3,23 +3,24 @@ import { AuthService } from '@auth0/auth0-angular';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, HeaderComponent],
   template: `
-    <nav style="background-color: #3f51b5; color: white; padding: 1rem;">
-      <h1 style="margin: 0; display: inline-block;">🦁 Zoo</h1>
-      <div style="display: inline-block; margin-left: 2rem;">
-        <a (click)="navigateTo('/animaux')" style="color: white; margin-right: 1rem; cursor: pointer;">Animaux</a>
-        <a (click)="navigateTo('/enclos')" style="color: white; margin-right: 1rem; cursor: pointer;">Enclos</a>
-        <a (click)="navigateTo('/visites')" style="color: white; cursor: pointer;">Visites</a>
-      </div>
-    </nav>
-    <router-outlet />
+    <app-header></app-header>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
   `,
-  styles: []
+  styles: [`
+    .main-content {
+      min-height: calc(100vh - 80px);
+      background: linear-gradient(135deg, #f8fffe 0%, #f0f9ff 100%);
+    }
+  `]
 })
 export class AppComponent implements OnInit {
   username: string | undefined;

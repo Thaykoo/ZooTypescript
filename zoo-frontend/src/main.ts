@@ -12,10 +12,10 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideAnimations(),
     provideAuth0({
-      domain: 'dev-rkbeore70k0guhoo.us.auth0.com',
-      clientId: 'v3vrmN1YoNbpT0noUABhq1aJpMyby56e', // À remplacer par votre Client ID
+      domain: 'dev-2vkuwcv6a1sf1mai.us.auth0.com',
+      clientId: 'zYpaj12eaiypaC3EuXWzlMCjBTan8Nle', // À remplacer par votre Client ID
       authorizationParams: {
-        redirect_uri: 'http://localhost:4201',
+        redirect_uri: 'http://localhost:4200/callback',
         audience: 'http://localhost:3000',
       },
     }),

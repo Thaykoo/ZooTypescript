@@ -12,11 +12,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
     provideAuth0({
-      domain: 'dev-rkbeore70k0guhoo.us.auth0.com',
-      clientId: 'VOTRE_CLIENT_ID', // Remplacez par votre client ID
+      domain: 'dev-2vkuwcv6a1sf1mai.us.auth0.com',
+      clientId: 'zYpaj12eaiypaC3EuXWzlMCjBTan8Nle',
       authorizationParams: {
-        redirect_uri: window.location.origin,
-        audience: 'http://localhost:3001'
+        redirect_uri: 'http://localhost:4200/callback',
+        audience: 'http://localhost:3000'
       }
     })
   ]
