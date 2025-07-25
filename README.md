@@ -1,10 +1,22 @@
-# 🦁 Zoo TypeScript - Application de Gestion
+# Zoo TypeScript - Application de Gestion de Zoo
 
-Application de gestion d'un zoo avec **NestJS** (backend) et **Angular** (frontend).
+## Description
+Application de gestion de zoo avec Angular 18 (frontend) et NestJS (backend).
 
-## 🚀 Démarrage en 4 étapes
+## Prérequis
+- **Node.js** v18+
+- **PostgreSQL** 
+- **Angular CLI** (`npm install -g @angular/cli`)
 
-### 1. Configuration PostgreSQL
+## Installation Rapide
+
+### 1. Cloner le projet
+```bash
+git clone https://github.com/Thaykoo/ZooTypescript.git
+cd TypescriptZoo
+```
+
+### 2. Base de données PostgreSQL
 ```bash
 # Se connecter à PostgreSQL
 sudo -u postgres psql
@@ -14,25 +26,38 @@ CREATE USER zoo_user WITH PASSWORD 'zoo_password';
 CREATE DATABASE zoo_db OWNER zoo_user;
 GRANT ALL PRIVILEGES ON DATABASE zoo_db TO zoo_user;
 \q
+```
 
-2. Démarrer le Backend
+### 3. Démarrer le Backend
+```bash
 cd zoo-backend
-npm install
 npm run start:dev
-✅ Backend prêt sur : http://localhost:3001
+```
+**Backend prêt sur** : http://localhost:3001
 
-3. Démarrer le Frontend (nouveau terminal)
+### 4. Démarrer le Frontend (nouveau terminal)
+```bash
 cd zoo-frontend
-npm install
-ng serve
-✅ Frontend prêt sur : http://localhost:4200
+npm start
+```
+**Frontend prêt sur** : http://localhost:4200
 
-4. Installer Angular CLI (si nécessaire)
-npm install -g @angular/cli
+## Liens pour tester
+- **Interface Web** : http://localhost:4200
+- **API Swagger** : http://localhost:3001/api
+- **API Backend** : http://localhost:3001
 
-🌐 Liens importants pour tester
-Service	URL	Description
-Interface Web	http://localhost:4200	Application complète (naviguer entre Animaux/Enclos/Visites)
-API Swagger	http://localhost:3001/api   
-API directe	http://localhost:3001	    Backend REST (pour curl)
+## Test de l'Application
+
+1. **Vérifier que PostgreSQL fonctionne** : 
+   - Le backend doit se connecter à la base `zoo_db`
+
+2. **Accéder au Frontend** : 
+   - Aller sur http://localhost:4200
+   - Tester les pages : Animaux, Enclos, Visites, Soigneurs
+
+3. **Vérifier l'API** : 
+   - Aller sur http://localhost:3001/api (Swagger)
+   - Tester les endpoints directement
+
 

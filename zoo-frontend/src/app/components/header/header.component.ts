@@ -33,6 +33,10 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-icon>group</mat-icon>
             <span>Visites</span>
           </a>
+          <a routerLink="/soigneurs" routerLinkActive="active" class="nav-item">
+            <mat-icon>medical_services</mat-icon>
+            <span>Soigneurs</span>
+          </a>
         </nav>
         
         <div class="header-actions">

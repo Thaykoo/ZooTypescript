@@ -6,10 +6,12 @@ import { AppService } from './app.service';
 import { AnimauxModule } from './animaux/animaux.module';
 import { EnclosModule } from './enclos/enclos.module';
 import { VisitesModule } from './visites/visites.module';
+import { SoigneursModule } from './soigneurs/soigneurs.module';
 import { AuthModule } from './auth/auth.module';
 import { Animal } from './animaux/entities/animal.entity';
 import { Enclos } from './enclos/entities/enclos.entity';
 import { Visite } from './visites/entities/visite.entity';
+import { SoigneurEntity } from './soigneurs/entities/soigneur.entity';
 import { DevAuthMiddleware } from './auth/dev-auth.middleware';
 
 @Module({
@@ -25,7 +27,7 @@ import { DevAuthMiddleware } from './auth/dev-auth.middleware';
         username: 'zoo_user',
         password: 'zoo_password',
         database: 'zoo_db',
-        entities: [Animal, Enclos, Visite],
+        entities: [Animal, Enclos, Visite, SoigneurEntity],
         synchronize: true, // Important : crée les tables automatiquement
         logging: true, // Important : affiche les requêtes SQL dans la console
       }),
@@ -33,6 +35,7 @@ import { DevAuthMiddleware } from './auth/dev-auth.middleware';
     AnimauxModule,
     EnclosModule,
     VisitesModule,
+    SoigneursModule,
     AuthModule,
   ],
   controllers: [AppController],

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { SoigneurDto, CreateSoigneurDto } from '../../dto/soigneur.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -69,5 +70,22 @@ export class ApiService {
         error: (error) => console.error(`DELETE ${url} error:`, error)
       })
     );
+  }
+
+  // MÉTHODES POUR LES SOIGNEURS
+  getSoigneurs(): Observable<SoigneurDto[]> {
+    return this.get<SoigneurDto[]>('/soigneurs');
+  }
+
+  getSoigneur(id: number): Observable<SoigneurDto> {
+    return this.get<SoigneurDto>(`/soigneurs/${id}`);
+  }
+
+  createSoigneur(soigneur: CreateSoigneurDto): Observable<SoigneurDto> {
+    return this.post<SoigneurDto>('/soigneurs', soigneur);
+  }
+
+  deleteSoigneur(id: number): Observable<{message: string}> {
+    return this.delete<{message: string}>(`/soigneurs/${id}`);
   }
 }

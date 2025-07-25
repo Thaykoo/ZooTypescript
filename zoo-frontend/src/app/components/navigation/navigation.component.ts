@@ -29,6 +29,10 @@ import { MatIconModule } from '@angular/material/icon';
           <mat-icon>confirmation_number</mat-icon>
           <span class="nav-text">Visites</span>
         </a>
+        <a routerLink="/soigneurs" routerLinkActive="active" class="nav-link">
+          <mat-icon>medical_services</mat-icon>
+          <span class="nav-text">Soigneurs</span>
+        </a>
       </div>
       
       <div class="nav-actions">

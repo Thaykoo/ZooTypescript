@@ -29,6 +29,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/liste-visites/liste-visites.component').then(m => m.ListeVisitesComponent),
     canActivate: [AuthGuard]
   },
+  { 
+    path: 'soigneurs', 
+    loadComponent: () => import('./pages/liste-soigneurs/liste-soigneurs.component').then(m => m.ListeSoigneursComponent),
+    canActivate: [AuthGuard]
+  },
   {
     path: 'unauthorized',
     loadComponent: () => import('./components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
