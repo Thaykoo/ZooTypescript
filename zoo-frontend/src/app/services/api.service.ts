@@ -18,9 +18,8 @@ export class ApiService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Content-Type': 'application/json',
-      // Supprimez temporairement l'en-tête d'autorisation
-      // 'Authorization': `Bearer ${this.authService.getToken()}`
+      'Content-Type': 'application/json'
+      // L'intercepteur Auth0 ajoutera automatiquement le token Authorization
     });
   }
 

@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { SoigneursService } from './soigneurs.service';
 import { CreateSoigneurDto } from './dto/create-soigneur.dto';
 import { SoigneurDto } from './dto/soigneur.dto';
-import { FakeAuthGuard, FakeRolesGuard } from '../auth/fake-auth.guard';
+import { JwtAuthGuard, RolesGuard } from '../auth/auth.guard';
 import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('Soigneurs')
@@ -12,8 +12,9 @@ export class SoigneursController {
   constructor(private readonly soigneursService: SoigneursService) {}
 
   @Post()
-  @UseGuards(FakeAuthGuard, FakeRolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Créer un nouveau soigneur (admin uniquement)' })
   @ApiResponse({ status: 201, description: 'Soigneur créé avec succès', type: SoigneurDto })
   @ApiResponse({ status: 401, description: 'Non authentifié' })
@@ -32,7 +33,8 @@ export class SoigneursController {
   }
 
   @Get(':id')
-  @UseGuards(FakeAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Récupérer un soigneur par ID (authentification requise)' })
   @ApiResponse({ status: 200, description: 'Soigneur trouvé', type: SoigneurDto })
   @ApiResponse({ status: 401, description: 'Non authentifié' })
@@ -43,8 +45,9 @@ export class SoigneursController {
   }
 
   @Delete(':id')
-  @UseGuards(FakeAuthGuard, FakeRolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Supprimer un soigneur (admin uniquement)' })
   @ApiResponse({ status: 200, description: 'Soigneur supprimé avec succès' })
   @ApiResponse({ status: 401, description: 'Non authentifié' })

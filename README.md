@@ -21,11 +21,14 @@ cd TypescriptZoo
 # Se connecter à PostgreSQL
 sudo -u postgres psql
 
-# Créer la base et l'utilisateur
-CREATE USER zoo_user WITH PASSWORD 'zoo_password';
+# Créer la base et l'utilisateur avec un mot de passe sécurisé
+CREATE USER zoo_user WITH PASSWORD 'YOUR_SECURE_PASSWORD_HERE';
 CREATE DATABASE zoo_db OWNER zoo_user;
 GRANT ALL PRIVILEGES ON DATABASE zoo_db TO zoo_user;
 \q
+
+# IMPORTANT: Remplacer YOUR_SECURE_PASSWORD_HERE par un mot de passe fort
+# et l'ajouter dans le fichier .env (voir AUTH0_CONFIG.md)
 ```
 
 ### 3. Démarrer le Backend

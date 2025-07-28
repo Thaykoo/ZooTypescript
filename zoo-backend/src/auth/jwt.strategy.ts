@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import * as jwksRsa from 'jwks-rsa';
@@ -12,11 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const issuerURL = configService.get('AUTH0_ISSUER_BASE_URL');
     const audience = configService.get('AUTH0_AUDIENCE');
 
-    console.log('🔑 JWT Strategy Configuration:', {
-      issuerURL,
-      audience,
-      jwksUri: `${issuerURL}.well-known/jwks.json`,
-    });
+    if (!issuerURL || !audience) {
+      throw new Error('AUTH0_ISSUER_BASE_URL et AUTH0_AUDIENCE doivent être définis dans les variables d\'environnement');
+    }
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -30,20 +28,37 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       issuer: issuerURL,
       algorithms: ['RS256'],
     });
+
+    this.logger.log('Configuration JWT Strategy:', {
+      issuerURL,
+      audience,
+      jwksUri: `${issuerURL}.well-known/jwks.json`,
+    });
   }
 
   async validate(payload: any) {
-    // Ajouter manuellement les rôles
-    console.log('🔑 Token original payload:', payload);
-    
-    // Créer un nouvel objet utilisateur avec des rôles forcés
-    const user = { 
-      userId: payload.sub, 
-      roles: ['gardien', 'veterinaire'],  // Ajouter manuellement les rôles ici
-      ...payload 
+    if (!payload.sub) {
+      throw new UnauthorizedException('Token invalide: subject manquant');
+    }
+
+    // Extraire les rôles depuis les custom claims ou metadata d'Auth0
+    const roles = payload['https://zoo-app.com/roles'] || 
+                  payload.roles || 
+                  payload['app_metadata']?.roles || 
+                  [];
+
+    this.logger.log('Token validé pour l\'utilisateur:', {
+      userId: payload.sub,
+      email: payload.email,
+      roles: roles,
+    });
+
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      roles: roles,
+      ...payload
     };
-    
-    console.log('👤 User with forced roles:', user);
-    return user;
   }
 }

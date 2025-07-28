@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -12,24 +12,26 @@ import { Animal } from './animaux/entities/animal.entity';
 import { Enclos } from './enclos/entities/enclos.entity';
 import { Visite } from './visites/entities/visite.entity';
 import { SoigneurEntity } from './soigneurs/entities/soigneur.entity';
-import { DevAuthMiddleware } from './auth/dev-auth.middleware';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'zoo_user',
-        password: 'zoo_password',
-        database: 'zoo_db',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
         entities: [Animal, Enclos, Visite, SoigneurEntity],
-        synchronize: true, // Important : crée les tables automatiquement
-        logging: true, // Important : affiche les requêtes SQL dans la console
+        synchronize: configService.get<string>('NODE_ENV') === 'development',
+        logging: configService.get<string>('NODE_ENV') === 'development',
       }),
     }),
     AnimauxModule,
@@ -41,10 +43,4 @@ import { DevAuthMiddleware } from './auth/dev-auth.middleware';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(DevAuthMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}

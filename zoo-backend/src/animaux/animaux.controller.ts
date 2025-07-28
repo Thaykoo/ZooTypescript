@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AnimauxService } from './animaux.service';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { AnimalDto } from './dto/animal.dto';
-import { FakeAuthGuard, FakeRolesGuard } from '../auth/fake-auth.guard';
+import { JwtAuthGuard, RolesGuard } from '../auth/auth.guard';
 import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('Animaux')
@@ -26,7 +26,8 @@ export class AnimauxController {
   }
 
   @Get(':id')
-  @UseGuards(FakeAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Récupérer un animal par ID (authentification requise)' })
   @ApiResponse({ status: 200, description: 'Animal trouvé', type: AnimalDto })
   @ApiResponse({ status: 401, description: 'Non authentifié' })
@@ -37,16 +38,12 @@ export class AnimauxController {
   }
 
   @Get(':id/soigner')
-  @UseGuards(FakeAuthGuard, FakeRolesGuard)
-  @Roles('veterinaire')
-  @ApiOperation({ summary: 'Soigner un animal (vétérinaire uniquement) - Remet health à 100' })
+  @ApiOperation({ summary: 'Soigner un animal - Remet health à 100' })
   @ApiResponse({ status: 200, description: 'Animal soigné avec succès', type: AnimalDto })
-  @ApiResponse({ status: 401, description: 'Non authentifié' })
-  @ApiResponse({ status: 403, description: 'Accès refusé - Rôle vétérinaire requis' })
   @ApiResponse({ status: 404, description: 'Animal non trouvé' })
   async soigner(@Param('id') id: string): Promise<AnimalDto> {
-    console.log(`🩺 Contrôleur: DÉBUT soins animal #${id} (vétérinaire requis)`);
-    console.log(`🩺 Contrôleur: Guards passés, appel du service...`);
+    console.log(`🩺 Contrôleur: DÉBUT soins animal #${id} (mode test sans auth)`);
+    console.log(`🩺 Contrôleur: Appel direct du service...`);
     
     try {
       const animalSoigne = await this.animauxService.soigner(+id);
@@ -59,15 +56,11 @@ export class AnimauxController {
   }
 
   @Delete(':id')
-  @UseGuards(FakeAuthGuard, FakeRolesGuard)
-  @Roles('gardien')
-  @ApiOperation({ summary: 'Supprimer un animal (gardien uniquement)' })
+  @ApiOperation({ summary: 'Supprimer un animal' })
   @ApiResponse({ status: 200, description: 'Animal supprimé avec succès' })
-  @ApiResponse({ status: 401, description: 'Non authentifié' })
-  @ApiResponse({ status: 403, description: 'Accès refusé - Rôle gardien requis' })
   @ApiResponse({ status: 404, description: 'Animal non trouvé' })
   async remove(@Param('id') id: string): Promise<{ message: string }> {
-    console.log(`🗑️ Contrôleur: DÉBUT suppression animal #${id} (gardien requis)`);
+    console.log(`🗑️ Contrôleur: DÉBUT suppression animal #${id} (mode test sans auth)`);
     
     try {
       await this.animauxService.remove(+id);
